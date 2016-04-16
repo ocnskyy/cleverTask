@@ -8,6 +8,11 @@ var login = angular.module('app.login', ['ui.router'])
     			controller: 'LoginCtrl'
     		});
     }])
-    .controller('LoginCtrl', ['$scope', function($scope) {
+    .controller('LoginCtrl', ['$scope', 'UserService', function($scope, UserService) {
         console.log('its login controller');
+        $scope.loginMe = function() {
+
+            UserService.logIn($scope.user);
+        };
+
     }]);
