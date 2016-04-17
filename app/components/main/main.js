@@ -8,9 +8,12 @@ var login = angular.module('app.main', ['ui.router'])
     			controller: 'MainCtrl'
     		});
     }])
-    .controller('MainCtrl', ['$scope', 'UserService', function($scope, UserService) {
+    .controller('MainCtrl', ['$scope', 'UserService', '$state', function($scope, UserService, $state) {
         console.log('its main controller');
-        $scope.user = localStorage.getItem('current_user');
+        $scope.user = UserService.getUser();
+        $scope.user === null ? $state.go('login') : console.log('logged');;
+
+        console.log('here', $scope.user);
 
         $scope.logout = function() {
             UserService.logOut();

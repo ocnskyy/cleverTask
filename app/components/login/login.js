@@ -11,7 +11,7 @@ var login = angular.module('app.login', ['ui.router'])
     .controller('LoginCtrl', ['$scope', 'UserService', function($scope, UserService) {
         console.log('its login controller');
         $scope.loginMe = function() {
-
+            console.log('login info', $scope.user);
             UserService.logIn($scope.user);
         };
 

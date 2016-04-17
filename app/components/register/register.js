@@ -23,6 +23,10 @@ var register = angular.module('app.register', ['ui.router'])
     			controller: 'RegisterCtrl'
     		});
     }])
-    .controller('RegisterCtrl', ['$scope', function($scope) {
+    .controller('RegisterCtrl', ['$scope', 'UserService', function($scope, UserService) {
         console.log('its registration controller');
+        $scope.registerMe = function() {
+            console.log('register', $scope.user);
+            UserService.register($scope.user);
+        };
     }]);

@@ -5,11 +5,15 @@ var userService = angular.module('app.data.userservice',[])
             console.log( "error code - " + err.statusCode );
         };
 
+        var getUser = function() {
+            return Backendless.UserService.getCurrentUser();
+        };
+
         var logIn = function(obj) {
             function userLoggedIn( user ) {
         		$state.go('main');
         		console.log(user);
-        		localStorage.setItem('current_user', username);
+                remember === true ? localStorage.setItem('current_user', username) : console.log('dont remember');
         	}
             var username = obj.login,
                 password = obj.password,
@@ -21,24 +25,28 @@ var userService = angular.module('app.data.userservice',[])
         var logOut = function() {
             localStorage.removeItem('current_user');
             function userLoggedout(obj) {
-    		   console.log(obj);
     		   $state.go('login');
     	   }
 
     	   Backendless.UserService.logout(new Backendless.Async(userLoggedout, gotError));
         };
 
-        var register = function(name, surname, email, password, telephone) {
+        var register = function(obj) {
+            function userRegistered() {
+                $state.go('login');
+            }
             var user = new Backendless.User();
-            user.name = name;
-            user.surname = surname;
-            user.email = email;
-            user.password = password;
-            user.telephone = telephone;
+            user.name = obj.name;
+            user.surname = obj.surname;
+            user.email = obj.email;
+            user.password = obj.password;
+            user.telephone = obj.telephone;
+            console.log('here', user);
             Backendless.UserService.register(user, new Backendless.Async(userRegistered, gotError));
         };
 
         return {
+            getUser : getUser,
             logIn : logIn,
             logOut : logOut,
             register : register
