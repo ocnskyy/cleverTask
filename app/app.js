@@ -13,7 +13,9 @@ var app = angular.module('app', [
     'app.main',
     'app.settings',
     'app.data.userservice',
-    'app.directives'
+    'app.data.bookservice',
+    'app.directives',
+    'monospaced.elastic'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');

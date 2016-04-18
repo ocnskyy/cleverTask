@@ -1,4 +1,4 @@
-var login = angular.module('app.login', ['ui.router'])
+var login = angular.module('app.login', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider

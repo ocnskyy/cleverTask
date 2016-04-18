@@ -1,4 +1,4 @@
-var settings = angular.module('app.settings', ['ui.router'])
+var settings = angular.module('app.settings', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider

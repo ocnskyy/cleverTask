@@ -13,12 +13,43 @@ var app = angular.module('app', [
     'app.main',
     'app.settings',
     'app.data.userservice',
-    'app.directives'
+    'app.data.bookservice',
+    'app.directives',
+    'monospaced.elastic'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');
         localStorage.getItem('current_user') ? $state.go('main') : $state.go('login');
     }]);
+
+var bookService = angular.module('app.data.bookservice',[])
+    .factory('BookService', function($state) {
+        var gotError = function ( err ) {
+            console.log( "error message - " + err.message );
+            console.log( "error code - " + err.statusCode );
+        };
+
+        var add = function(obj) {
+            function gotSaved() {
+                console.log('SUCCESS');
+            }
+            Backendless.Persistence.of('Book').save(obj, new Backendless.Async(gotSaved, gotError));
+        };
+
+        var remove = function() {
+
+        };
+
+        var edit = function() {
+
+        };
+
+        return {
+            add : add,
+            remove : remove,
+            edit : edit
+        };
+    });
 
 var userService = angular.module('app.data.userservice',[])
     .factory('UserService', ['$state', function($state) {
@@ -75,7 +106,49 @@ var userService = angular.module('app.data.userservice',[])
         };
     }]);
 
-var login = angular.module('app.login', ['ui.router'])
+angular.module('app.directives', [])
+  .directive('pwCheck', [function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, elem, attrs, ctrl) {
+        var firstPassword = '#' + attrs.pwCheck;
+        elem.add(firstPassword).on('keyup', function () {
+          scope.$apply(function () {
+            var v = elem.val()===$(firstPassword).val();
+            ctrl.$setValidity('pwmatch', v);
+          });
+        });
+      }
+  };
+  }]);
+
+var login = angular.module('app.main', [])
+
+    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+        $stateProvider
+    		.state('main', {
+    			url: '/main',
+    			templateUrl: 'components/main/main.html',
+    			controller: 'MainCtrl'
+    		});
+    }])
+    .controller('MainCtrl', ['$scope', 'UserService', 'BookService', '$state', function($scope, UserService, BookService, $state) {
+        console.log('its main controller');
+        $scope.user = UserService.getUser();
+        $scope.user === null ? $state.go('login') : console.log('logged');;
+
+        console.log('here', $scope.user);
+
+        $scope.addBook = function() {
+            BookService.add($scope.newBook);
+        };
+
+        $scope.logout = function() {
+            UserService.logOut();
+        };
+    }]);
+
+var login = angular.module('app.login', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider
@@ -94,28 +167,6 @@ var login = angular.module('app.login', ['ui.router'])
 
     }]);
 
-var login = angular.module('app.main', ['ui.router'])
-
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
-        $stateProvider
-    		.state('main', {
-    			url: '/main',
-    			templateUrl: 'components/main/main.html',
-    			controller: 'MainCtrl'
-    		});
-    }])
-    .controller('MainCtrl', ['$scope', 'UserService', '$state', function($scope, UserService, $state) {
-        console.log('its main controller');
-        $scope.user = UserService.getUser();
-        $scope.user === null ? $state.go('login') : console.log('logged');;
-
-        console.log('here', $scope.user);
-
-        $scope.logout = function() {
-            UserService.logOut();
-        };
-    }]);
-
 // var registration = angular.module('app.registration', ['ui.router'])
 //
 //     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
@@ -131,7 +182,7 @@ var login = angular.module('app.main', ['ui.router'])
 //     }]);
 
 
-var register = angular.module('app.register', ['ui.router'])
+var register = angular.module('app.register', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider
@@ -149,7 +200,7 @@ var register = angular.module('app.register', ['ui.router'])
         };
     }]);
 
-var settings = angular.module('app.settings', ['ui.router'])
+var settings = angular.module('app.settings', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider
@@ -163,19 +214,3 @@ var settings = angular.module('app.settings', ['ui.router'])
         console.log('its settings controller');
 
     }]);
-
-angular.module('app.directives', [])
-  .directive('pwCheck', [function () {
-    return {
-      require: 'ngModel',
-      link: function (scope, elem, attrs, ctrl) {
-        var firstPassword = '#' + attrs.pwCheck;
-        elem.add(firstPassword).on('keyup', function () {
-          scope.$apply(function () {
-            var v = elem.val()===$(firstPassword).val();
-            ctrl.$setValidity('pwmatch', v);
-          });
-        });
-      }
-  };
-  }]);

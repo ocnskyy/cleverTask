@@ -13,7 +13,7 @@
 //     }]);
 
 
-var register = angular.module('app.register', ['ui.router'])
+var register = angular.module('app.register', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
         $stateProvider
