@@ -1,23 +1,32 @@
 <div class="container">
 	<!-- <div class="row"> -->
 		<!-- <div class="col-md-6 col-md-offset-3"> -->
-			<form class="form-signin" name="loginForm" novalidate>
+			<form class="form-signin" name="loginForm" novalidate  ng-submit="loginMe()">
 		    	<h2 class="form-signin-heading">Please sign in</h2>
 				<div class="form-group">
 					<label for="inputEmail" class="sr-only">Email address</label>
 			        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus ng-model="user.login" name="login">
-					<p class="help-block" ng-show="loginForm.login.$error.required || loginForm.login.$invalid">Please enter a valid e-mail</p>
+					<span class="help-block" ng-show="loginForm.login.$dirty && loginForm.login.$error.email">Please enter a valid e-mail</span>
+					<span class="help-block" ng-show="loginForm.login.$dirty && loginForm.login.$error.required">You need enter an e-mail</span>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword" class="sr-only">Password</label>
-			        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" ng-model="user.password">
+			        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password"
+						ng-model="user.password"
+						ng-minlength="6"
+						ng-maxlength="16"
+						ng-pattern="/^[a-zA-Z0-9]*$/">
+					<span class="help-block" ng-show="loginForm.password.$dirty && loginForm.password.$error.required">You need enter a password</span>
+					<span class="help-block" ng-show="loginForm.password.$dirty && loginForm.password.$error.minlength">Password too short</span>
+					<span class="help-block" ng-show="loginForm.password.$dirty && loginForm.password.$error.maxlength">Password too long</span>
+					<span class="help-block" ng-show="loginForm.password.$dirty && loginForm.password.$error.pattern">Only letters and numbers</span>
 				</div>
 		        <div class="checkbox">
 		        	<label>
 		            	<input type="checkbox" value="true" ng-model="user.remember"> Remember me
 		        	</label>
 		        </div>
-		        <button class="btn btn-lg btn-primary btn-block" ng-click="loginMe()" type="submit" ng-disabled="loginForm.$invalid">Sign in</button>
+		        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="loginForm.$invalid">Sign in</button>
 				<div class="checkbox text-center">
 					<p><a href="#/register">Don't have an account?</a></p>
 				</div>

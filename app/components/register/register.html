@@ -1,33 +1,51 @@
 <div class="container">
 	<!-- <div class="row"> -->
 		<!-- <div class="col-md-6 col-md-offset-3"> -->
-			<form class="form-signin" name="registerForm" novalidate>
+			<form class="form-signin" name="registerForm" novalidate ng-submit="registerMe()" >
 		    	<h2 class="form-signin-heading">Please sign up</h2>
+
 				<div class="form-group">
 					<label for="inputEmail" class="sr-only">Email address</label>
-			        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" ng-model="user.email">
+			        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus ng-model="user.email" name="email">
+					<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.email">Please enter a valid e-mail</span>
+					<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.required">You need enter an e-mail</span>
 				</div>
+
 				<div class="form-group">
 					<label for="inputName" class="sr-only">Name</label>
-			        <input type="text" id="inputName" class="form-control" placeholder="Name" required="" ng-model="user.name">
+			        <input type="text" id="inputName" class="form-control" placeholder="Name" ng-model="user.name" name="name" ng-maxlength="255">
 				</div>
+
 				<div class="form-group">
 					<label for="inputSurname" class="sr-only">Surname</label>
-			        <input type="text" id="inputSurname" class="form-control" placeholder="Surname" required="" ng-model="user.surname">
+			        <input type="text" id="inputSurname" class="form-control" placeholder="Surname" ng-model="user.surname" name="surname" ng-maxlength="255">
 				</div>
+
 				<div class="form-group">
 					<label for="inputPassword" class="sr-only">Password</label>
-			        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" ng-model="user.password">
+			        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="user.password" name="password"
+					ng-minlength="6"
+					ng-maxlength="16"
+					ng-pattern="/^[a-zA-Z0-9]*$/">
+					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.required">You need enter a password</span>
+					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.minlength">Password too short</span>
+					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.maxlength">Password too long</span>
+					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.pattern">Only letters and numbers</span>
 				</div>
+
 				<div class="form-group">
 					<label for="inputPassword2" class="sr-only">Confirm password</label>
-			        <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm password" required="" ng-model="user.password2">
+			        <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm password" required ng-model="user.password2"
+					pw-check="inputPassword" name="password2">
+					<span class="help-block" ng-show="registerForm.password2.$dirty && registerForm.password2.$error.pwmatch">Passwords don't match</span>
 				</div>
+
 				<div class="form-group">
 					<label for="inputTelephone" class="sr-only">Telephone</label>
-			        <input type="text" id="inputTelephone" class="form-control" placeholder="Telephone" required="" ng-model="user.telephone">
+			        <input type="text" id="inputTelephone" class="form-control" placeholder="Telephone" ng-model="user.telephone" name="tel">
 				</div>
-		        <button class="btn btn-lg btn-primary btn-block" ng-click="registerMe()" type="submit" ng-disabled="registerForm.$invalid">Sign up</button>
+
+		        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="registerForm.$invalid">Sign up</button>
 				<div class="checkbox text-center">
 					<p><a href="#/login">Back to login</a></p>
 				</div>

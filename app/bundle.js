@@ -12,7 +12,8 @@ var app = angular.module('app', [
     'app.register',
     'app.main',
     'app.settings',
-    'app.data.userservice'
+    'app.data.userservice',
+    'app.directives'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');
@@ -162,3 +163,19 @@ var settings = angular.module('app.settings', ['ui.router'])
         console.log('its settings controller');
 
     }]);
+
+angular.module('app.directives', [])
+  .directive('pwCheck', [function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, elem, attrs, ctrl) {
+        var firstPassword = '#' + attrs.pwCheck;
+        elem.add(firstPassword).on('keyup', function () {
+          scope.$apply(function () {
+            var v = elem.val()===$(firstPassword).val();
+            ctrl.$setValidity('pwmatch', v);
+          });
+        });
+      }
+  };
+  }]);
