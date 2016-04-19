@@ -9,7 +9,7 @@
     "gulp-notify": "^2.2.0"
   },
   "scripts": {
-    "launch": "cd app && http-server",
+    "launch": "cd app && http-server -p 9999",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "bower install && gulp && npm run launch"
   },
