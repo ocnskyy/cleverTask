@@ -13,17 +13,29 @@ var app = angular.module('app', [
     'app.main',
     'app.settings',
     'app.data.userservice',
-    'app.data.bookservice',
-    'app.directives',
-    'monospaced.elastic'
+    'app.data.productservice',
+    'app.val.pwcheck',
+    'app.ui.navbarmenu',
+    'app.ui.addproduct',
+    'app.ui.productlist',
+    'monospaced.elastic',
+    'ngAnimate'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');
         localStorage.getItem('current_user') ? $state.go('main') : $state.go('login');
     }]);
 
-var bookService = angular.module('app.data.bookservice',[])
-    .factory('BookService', function($state) {
+var addProduct = angular.module('app.ui.addproduct', [])
+    .directive('addProduct', function() {
+
+        return {
+            templateUrl : 'components/add-product-directive/add-product.directive.html'
+        };
+    });
+
+var productService = angular.module('app.data.productservice',[])
+    .factory('ProductService', function($state) {
         var gotError = function ( err ) {
             console.log( "error message - " + err.message );
             console.log( "error code - " + err.statusCode );
@@ -33,7 +45,14 @@ var bookService = angular.module('app.data.bookservice',[])
             function gotSaved() {
                 console.log('SUCCESS');
             }
-            Backendless.Persistence.of('Book').save(obj, new Backendless.Async(gotSaved, gotError));
+            Backendless.Persistence.of('Product').save(obj, new Backendless.Async(gotSaved, gotError));
+        };
+
+        var get = function(owner, count, callback) {
+            var dataQuery = new Backendless.DataQuery();
+            dataQuery.condition = "ownerId = '" + owner + "'";
+            dataQuery.options = {pageSize : count};
+            Backendless.Persistence.of('Product').find(dataQuery, new Backendless.Async(callback, gotError));
         };
 
         var remove = function() {
@@ -46,14 +65,16 @@ var bookService = angular.module('app.data.bookservice',[])
 
         return {
             add : add,
-            remove : remove,
-            edit : edit
+            get : get,
+            edit : edit,
+            remove : remove
         };
     });
 
 var userService = angular.module('app.data.userservice',[])
     .factory('UserService', ['$state', function($state) {
         var gotError = function ( err ) {
+            alert(err.message);
             console.log( "error message - " + err.message );
             console.log( "error code - " + err.statusCode );
         };
@@ -65,7 +86,6 @@ var userService = angular.module('app.data.userservice',[])
         var logIn = function(obj) {
             function userLoggedIn( user ) {
         		$state.go('main');
-        		console.log(user);
                 remember === true ? localStorage.setItem('current_user', username) : console.log('dont remember');
         	}
             var username = obj.login,
@@ -94,7 +114,6 @@ var userService = angular.module('app.data.userservice',[])
             user.email = obj.email;
             user.password = obj.password;
             user.telephone = obj.telephone;
-            console.log('here', user);
             Backendless.UserService.register(user, new Backendless.Async(userRegistered, gotError));
         };
 
@@ -103,48 +122,6 @@ var userService = angular.module('app.data.userservice',[])
             logIn : logIn,
             logOut : logOut,
             register : register
-        };
-    }]);
-
-angular.module('app.directives', [])
-  .directive('pwCheck', [function () {
-    return {
-      require: 'ngModel',
-      link: function (scope, elem, attrs, ctrl) {
-        var firstPassword = '#' + attrs.pwCheck;
-        elem.add(firstPassword).on('keyup', function () {
-          scope.$apply(function () {
-            var v = elem.val()===$(firstPassword).val();
-            ctrl.$setValidity('pwmatch', v);
-          });
-        });
-      }
-  };
-  }]);
-
-var login = angular.module('app.main', [])
-
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
-        $stateProvider
-    		.state('main', {
-    			url: '/main',
-    			templateUrl: 'components/main/main.html',
-    			controller: 'MainCtrl'
-    		});
-    }])
-    .controller('MainCtrl', ['$scope', 'UserService', 'BookService', '$state', function($scope, UserService, BookService, $state) {
-        console.log('its main controller');
-        $scope.user = UserService.getUser();
-        $scope.user === null ? $state.go('login') : console.log('logged');;
-
-        console.log('here', $scope.user);
-
-        $scope.addBook = function() {
-            BookService.add($scope.newBook);
-        };
-
-        $scope.logout = function() {
-            UserService.logOut();
         };
     }]);
 
@@ -166,6 +143,82 @@ var login = angular.module('app.login', [])
         };
 
     }]);
+
+var login = angular.module('app.main', [])
+
+    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+        $stateProvider
+    		.state('main', {
+    			url: '/main',
+    			templateUrl: 'components/main/main.html',
+    			controller: 'MainCtrl'
+    		});
+    }])
+    .controller('MainCtrl', ['$scope', 'UserService', 'ProductService', '$state', function($scope, UserService, ProductService, $state) {
+        console.log('its main controller');
+        $scope.user = UserService.getUser();
+        $scope.user === null ? $state.go('login') : console.log('logged');
+        $scope.products = [];
+
+        console.log('logged user', $scope.user);
+
+        $scope.addProduct = function() {
+            ProductService.add($scope.newBook);
+        };
+
+        $scope.getProduct = function(count) {
+            function catchProduct(res) {
+                $scope.$apply(function() {
+                    $scope.products = res.data;
+                });
+                console.log('heh', $scope.products);
+            }
+            ProductService.get($scope.user.objectId, count, catchProduct);
+        };
+        $scope.getProduct(10);
+
+        $scope.logout = function() {
+            UserService.logOut();
+        };
+    }]);
+
+var navbarMenu = angular.module('app.ui.navbarmenu', [])
+    .directive('navbarMenu', function() {
+        return {
+            templateUrl : 'components/navbar-menu-directive/navbar-menu.directive.html'
+        };
+    });
+
+var productList = angular.module('app.ui.productlist', [])
+    .directive('productList', function() {
+        var controller = function($scope) {
+            $scope.list = {current : null};
+            $scope.openClose = function(param, curr) {
+                $scope.list.current = (param == curr ? null : param);
+            };
+        };
+
+        return {
+            controller : controller,
+            templateUrl : 'components/product-list-directive/product-list.directive.html',
+        };
+    });
+
+angular.module('app.val.pwcheck', [])
+  .directive('pwCheck', [function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, elem, attrs, ctrl) {
+        var firstPassword = '#' + attrs.pwCheck;
+        elem.add(firstPassword).on('keyup', function () {
+          scope.$apply(function () {
+            var v = elem.val()===$(firstPassword).val();
+            ctrl.$setValidity('pwmatch', v);
+          });
+        });
+      }
+  };
+  }]);
 
 // var registration = angular.module('app.registration', ['ui.router'])
 //

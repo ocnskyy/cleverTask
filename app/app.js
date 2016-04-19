@@ -13,9 +13,13 @@ var app = angular.module('app', [
     'app.main',
     'app.settings',
     'app.data.userservice',
-    'app.data.bookservice',
-    'app.directives',
-    'monospaced.elastic'
+    'app.data.productservice',
+    'app.val.pwcheck',
+    'app.ui.navbarmenu',
+    'app.ui.addproduct',
+    'app.ui.productlist',
+    'monospaced.elastic',
+    'ngAnimate'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');

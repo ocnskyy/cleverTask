@@ -8,16 +8,28 @@ var login = angular.module('app.main', [])
     			controller: 'MainCtrl'
     		});
     }])
-    .controller('MainCtrl', ['$scope', 'UserService', 'BookService', '$state', function($scope, UserService, BookService, $state) {
+    .controller('MainCtrl', ['$scope', 'UserService', 'ProductService', '$state', function($scope, UserService, ProductService, $state) {
         console.log('its main controller');
         $scope.user = UserService.getUser();
-        $scope.user === null ? $state.go('login') : console.log('logged');;
+        $scope.user === null ? $state.go('login') : console.log('logged');
+        $scope.products = [];
 
-        console.log('here', $scope.user);
+        console.log('logged user', $scope.user);
 
-        $scope.addBook = function() {
-            BookService.add($scope.newBook);
+        $scope.addProduct = function() {
+            ProductService.add($scope.newBook);
         };
+
+        $scope.getProduct = function(count) {
+            function catchProduct(res) {
+                $scope.$apply(function() {
+                    $scope.products = res.data;
+                });
+                console.log('heh', $scope.products);
+            }
+            ProductService.get($scope.user.objectId, count, catchProduct);
+        };
+        $scope.getProduct(10);
 
         $scope.logout = function() {
             UserService.logOut();

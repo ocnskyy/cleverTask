@@ -1,4 +1,4 @@
-angular.module('app.directives', [])
+angular.module('app.val.pwcheck', [])
   .directive('pwCheck', [function () {
     return {
       require: 'ngModel',

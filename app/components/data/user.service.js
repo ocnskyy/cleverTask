@@ -1,6 +1,7 @@
 var userService = angular.module('app.data.userservice',[])
     .factory('UserService', ['$state', function($state) {
         var gotError = function ( err ) {
+            alert(err.message);
             console.log( "error message - " + err.message );
             console.log( "error code - " + err.statusCode );
         };
@@ -12,7 +13,6 @@ var userService = angular.module('app.data.userservice',[])
         var logIn = function(obj) {
             function userLoggedIn( user ) {
         		$state.go('main');
-        		console.log(user);
                 remember === true ? localStorage.setItem('current_user', username) : console.log('dont remember');
         	}
             var username = obj.login,
@@ -41,7 +41,6 @@ var userService = angular.module('app.data.userservice',[])
             user.email = obj.email;
             user.password = obj.password;
             user.telephone = obj.telephone;
-            console.log('here', user);
             Backendless.UserService.register(user, new Backendless.Async(userRegistered, gotError));
         };
 

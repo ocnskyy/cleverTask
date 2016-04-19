@@ -1,0 +1,16 @@
+<div class="container" id="productList">
+    <div class="jumbotron" ng-repeat="p in products">
+        <h2>Name of product: <i>{{p.name}}</i></h2>
+        <p>Price: {{p.price | currency}}</p>
+        <div class="accordion" id="{{p.objectId}}">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <p class="accordion-toggle" role="button" ng-click="openClose(p.objectId, list.current)">
+                        About<span class="glyphicon" ng-class="list.current != p.objectId ? 'glyphicon-menu-down' : 'glyphicon-menu-up'"></span>
+                    </p>
+                </div>
+                <div class="accordion-body" ng-hide="list.current != p.objectId">{{p.about}}</div>
+            </div>
+        </div>
+    </div>
+</div>
