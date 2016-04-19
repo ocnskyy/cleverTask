@@ -17,9 +17,10 @@ var app = angular.module('app', [
     'app.val.pwcheck',
     'app.ui.navbarmenu',
     'app.ui.addproduct',
+    'app.ui.editproduct',
     'app.ui.productlist',
-    'monospaced.elastic',
-    'ngAnimate'
+    'app.ui.changepw',
+    'monospaced.elastic'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');
@@ -30,7 +31,7 @@ var addProduct = angular.module('app.ui.addproduct', [])
     .directive('addProduct', function() {
 
         return {
-            templateUrl : 'components/add-product-directive/add-product.directive.html'
+            templateUrl : 'components/add-product-directive/add-product.directive.html',
         };
     });
 
@@ -41,11 +42,8 @@ var productService = angular.module('app.data.productservice',[])
             console.log( "error code - " + err.statusCode );
         };
 
-        var add = function(obj) {
-            function gotSaved() {
-                console.log('SUCCESS');
-            }
-            Backendless.Persistence.of('Product').save(obj, new Backendless.Async(gotSaved, gotError));
+        var add = function(obj, callback) {
+            Backendless.Persistence.of('Product').save(obj, new Backendless.Async(callback, gotError));
         };
 
         var get = function(owner, count, callback) {
@@ -55,18 +53,13 @@ var productService = angular.module('app.data.productservice',[])
             Backendless.Persistence.of('Product').find(dataQuery, new Backendless.Async(callback, gotError));
         };
 
-        var remove = function() {
-
-        };
-
-        var edit = function() {
-
+        var remove = function(p, callback) {
+            Backendless.Persistence.of('Product').remove(p, new Backendless.Async(callback, gotError));
         };
 
         return {
             add : add,
             get : get,
-            edit : edit,
             remove : remove
         };
     });
@@ -77,6 +70,10 @@ var userService = angular.module('app.data.userservice',[])
             alert(err.message);
             console.log( "error message - " + err.message );
             console.log( "error code - " + err.statusCode );
+        };
+
+        var edit = function(p, callback) {
+            Backendless.UserService.update(p, new Backendless.Async(callback, gotError));
         };
 
         var getUser = function() {
@@ -118,6 +115,7 @@ var userService = angular.module('app.data.userservice',[])
         };
 
         return {
+            edit : edit,
             getUser : getUser,
             logIn : logIn,
             logOut : logOut,
@@ -125,10 +123,40 @@ var userService = angular.module('app.data.userservice',[])
         };
     }]);
 
+var changePw = angular.module('app.ui.changepw', [])
+    .directive('changePw', function() {
+        return {
+            templateUrl : 'components/change-pw-directive/change-pw.directive.html'
+        };
+    });
+
+var editProduct = angular.module('app.ui.editproduct', [])
+    .directive('editProduct', function() {
+        var controller = function($scope, ProductService) {
+            $scope.finishUpdate = function() {
+                function productEdited() {
+                    console.log('edited');
+                };
+                ProductService.add($scope.editProduct, productEdited);
+            };
+        };
+
+        return {
+            controller : controller,
+            templateUrl : 'components/edit-product-directive/edit-product.directive.html'
+        };
+    });
+
 var login = angular.module('app.login', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
+        $urlRouterProvider.otherwise("/404");
+
         $stateProvider
+            .state('404', {
+                url: '/404',
+                templateUrl: 'components/404/404.html'
+            })
     		.state('login', {
     			url: '/login',
     			templateUrl: 'components/login/login.html',
@@ -154,16 +182,26 @@ var login = angular.module('app.main', [])
     			controller: 'MainCtrl'
     		});
     }])
-    .controller('MainCtrl', ['$scope', 'UserService', 'ProductService', '$state', function($scope, UserService, ProductService, $state) {
+    .controller('MainCtrl', ['$scope', 'UserService', 'ProductService', '$state', '$timeout', function($scope, UserService, ProductService, $state, $timeout) {
         console.log('its main controller');
         $scope.user = UserService.getUser();
         $scope.user === null ? $state.go('login') : console.log('logged');
         $scope.products = [];
+        $scope.deleteProducts = [];
+        $scope.editProduct = null;
+        $scope.pagination = 10;
+        $scope.hideAdd = false;
 
         console.log('logged user', $scope.user);
 
         $scope.addProduct = function() {
-            ProductService.add($scope.newBook);
+            function gotSaved(res) {
+                $scope.$apply(function() {
+                    $scope.products.unshift(res);
+                    $scope.newBook = undefined;
+                });
+            }
+            ProductService.add($scope.newBook, gotSaved);
         };
 
         $scope.getProduct = function(count) {
@@ -173,9 +211,22 @@ var login = angular.module('app.main', [])
                 });
                 console.log('heh', $scope.products);
             }
+            $scope.pagination = count;
             ProductService.get($scope.user.objectId, count, catchProduct);
         };
-        $scope.getProduct(10);
+
+        $scope.removeProduct = function() {
+            function userDeleted(res) {
+                console.log('deleted', res);
+                $scope.$apply(function() {
+                    $scope.products.splice($scope.deleteProducts[i], 1);
+                    $scope.deleteProducts.splice($scope.deleteProducts[i], 1);
+                });
+            }
+            for (var i =0; i < $scope.deleteProducts.length; i++) {
+                ProductService.remove($scope.deleteProducts[i], userDeleted, $scope);
+            }
+        };
 
         $scope.logout = function() {
             UserService.logOut();
@@ -191,11 +242,30 @@ var navbarMenu = angular.module('app.ui.navbarmenu', [])
 
 var productList = angular.module('app.ui.productlist', [])
     .directive('productList', function() {
-        var controller = function($scope) {
-            $scope.list = {current : null};
+        var controller = function($scope, ProductService) {
+            $scope.current = null;
             $scope.openClose = function(param, curr) {
-                $scope.list.current = (param == curr ? null : param);
+                $scope.current = (param == curr ? null : param);
             };
+
+            $scope.editProduct = function(p) {
+                $scope.editProduct = p;
+            };
+
+            $scope.addToRemove = function(p) {
+                console.log('srabotalo');
+                if (p.toDelete == true) {
+                    p.toDelete = false;
+                    $scope.deleteProducts.splice($scope.deleteProducts.indexOf(p), 1);
+                }
+                else {
+                    p.toDelete = true;
+                    $scope.deleteProducts.push(p);
+                }
+                console.log('yo', $scope.deleteProducts);
+            };
+
+            $scope.getProduct(10);
         };
 
         return {
@@ -219,21 +289,6 @@ angular.module('app.val.pwcheck', [])
       }
   };
   }]);
-
-// var registration = angular.module('app.registration', ['ui.router'])
-//
-//     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
-//         $stateProvider
-//             .state('registration', {
-//                 url: '/registration',
-//                 templateUrl: 'components/registration/registration.html',
-//                 controller: 'RegistrationCtrl'
-//             });
-//     }])
-//     .controller('RegistrationCtrl', ['$scope', function($scope) {
-//         console.log('its registration controller');
-//     }]);
-
 
 var register = angular.module('app.register', [])
 
@@ -263,7 +318,24 @@ var settings = angular.module('app.settings', [])
     			controller: 'SettingsCtrl'
     		});
     }])
-    .controller('SettingsCtrl', ['$scope', 'UserService', function($scope, UserService) {
+    .controller('SettingsCtrl', ['$scope', 'UserService', '$state', function($scope, UserService, $state) {
         console.log('its settings controller');
+        $scope.user = UserService.getUser();
+        $scope.editUser = UserService.getUser();
+        // $scope.user === null ? $state.go('login') : console.log('logged');
+        $scope.hideAdd = true;
+        localStorage.getItem('current_user') || $scope.user ? console.log('logged') : $state.go('login');
+
+        $scope.updateUser = function() {
+            console.log('here', $scope.editUser);
+            function gotEdited(res) {
+                console.log('edited');
+            }
+            UserService.edit($scope.editUser, gotEdited);
+        };
+
+        $scope.logout = function() {
+            UserService.logOut();
+        };
 
     }]);

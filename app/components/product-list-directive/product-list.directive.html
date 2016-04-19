@@ -1,15 +1,24 @@
 <div class="container" id="productList">
-    <div class="jumbotron" ng-repeat="p in products">
-        <h2>Name of product: <i>{{p.name}}</i></h2>
+    <div class="jumbotron" ng-repeat="p in products track by $index">
+        <h2>Product name:
+            <span class="controlls">
+                <i class="glyphicon glyphicon-pencil" ng-click="editProduct(p)" data-toggle="modal" data-target="#editProduct"></i>
+                <i class="glyphicon glyphicon-remove"
+                ng-class="{'to-delete' : p.toDelete}"
+                ng-click="addToRemove(p)"
+                    style="margin-left: 10px;" ></i>
+            </span>
+            <br><i class="product-name">{{p.name}}</i>
+        </h2>
         <p>Price: {{p.price | currency}}</p>
-        <div class="accordion" id="{{p.objectId}}">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <p class="accordion-toggle" role="button" ng-click="openClose(p.objectId, list.current)">
-                        About<span class="glyphicon" ng-class="list.current != p.objectId ? 'glyphicon-menu-down' : 'glyphicon-menu-up'"></span>
+        <div  id="{{p.objectId}}">
+            <div >
+                <div>
+                    <p  role="button" ng-click="openClose(p.objectId, current)">
+                        About<span class="glyphicon glyphicon-menu-down" ng-class="current == p.objectId ? 'glyphicon-menu-up' : 'glyphicon-menu-down'"></span>
                     </p>
                 </div>
-                <div class="accordion-body" ng-hide="list.current != p.objectId">{{p.about}}</div>
+                <div ng-show="current == p.objectId">{{p.about}}</div>
             </div>
         </div>
     </div>

@@ -1,9 +1,19 @@
-<navbar-menu></navbar-menu>
+<div id="wrap">
+    <navbar-menu></navbar-menu>
 
-<add-product></add-product>
+    <add-product></add-product>
+    <edit-product></edit-product>
 
-<!-- <button type="button" name="button" ng-click="getProduct()">yrtr</button> -->
-<product-list></product-list>
-<!-- <p ng-repeat="p in products">
-    {{p.name}}
-</p> -->
+    <product-list></product-list>
+    
+    <div id="push"></div>
+</div>
+<div id="footer">
+    <div class="container">
+        <p class="text-center credit">
+            <span role="button" ng-click="getProduct(10)" ng-class="{active : pagination == 10}">10</span> |
+            <span role="button" ng-click="getProduct(20)" ng-class="{active : pagination == 20}">20</span> |
+            <span role="button" ng-click="getProduct(50)" ng-class="{active : pagination == 50}">50</span>
+        </p>
+    </div>
+</div>

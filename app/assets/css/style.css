@@ -4,7 +4,6 @@
   margin: 0 auto;
   margin-top: 40px;
   background-color: #fff;
-  /*border: 1px solid rgba(0, 0, 0, 0.1);*/
 }
 
 input.ng-invalid.ng-dirty, textarea.ng-invalid.ng-dirty {
@@ -20,12 +19,48 @@ textarea {
     resize: none;
 }
 
-.ng-hide {
-    display: none;
-    transition: display 2s;
+.product-name {
+    word-wrap: break-word;
 }
 
-.ng-show {
-    display: block;
-    transition: display 2s;
+.controlls {
+    float: right;
+}
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
+}
+
+#push {
+    height: 60px;
+}
+
+#footer {
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+#footer p {
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.active {
+    color: #4cae4c;
+    font-size: 1.2em;
+}
+
+.to-delete {
+    color: red;
 }

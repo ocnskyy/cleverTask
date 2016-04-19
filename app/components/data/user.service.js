@@ -6,6 +6,10 @@ var userService = angular.module('app.data.userservice',[])
             console.log( "error code - " + err.statusCode );
         };
 
+        var edit = function(p, callback) {
+            Backendless.UserService.update(p, new Backendless.Async(callback, gotError));
+        };
+
         var getUser = function() {
             return Backendless.UserService.getCurrentUser();
         };
@@ -45,6 +49,7 @@ var userService = angular.module('app.data.userservice',[])
         };
 
         return {
+            edit : edit,
             getUser : getUser,
             logIn : logIn,
             logOut : logOut,

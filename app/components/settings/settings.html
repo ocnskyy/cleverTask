@@ -1,1 +1,40 @@
-<h1>Its settings</h1>
+<navbar-menu></navbar-menu>
+<add-product></add-product>
+<div class="container">
+	<form class="form-signin" name="settingForm" novalidate ng-submit="updateUser()" >
+    	<h2 class="form-signin-heading">Edit personal info</h2>
+
+		<div class="form-group">
+			<label for="inputEmail" class="sr-only">Email address</label>
+	        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus ng-model="editUser.email" name="email">
+			<span class="help-block" ng-show="settingForm.email.$dirty && settingForm.email.$error.email">Please enter a valid e-mail</span>
+			<span class="help-block" ng-show="settingForm.email.$dirty && settingForm.email.$error.required">You need enter an e-mail</span>
+		</div>
+
+		<div class="form-group">
+			<label for="inputName" class="sr-only">Name</label>
+	        <input type="text" id="inputName" class="form-control" placeholder="Name"
+            ng-model="editUser.name" name="name" ng-maxlength="255" ng-pattern="/^[a-zA-Z]*$/">
+            <span class="help-block" ng-show="settingForm.name.$dirty && settingForm.name.$error.pattern">Please enter a valid name</span>
+		</div>
+
+		<div class="form-group">
+			<label for="inputSurname" class="sr-only">Surname</label>
+	        <input type="text" id="inputSurname" class="form-control" placeholder="Surname"
+            ng-model="editUser.surname" name="surname" ng-maxlength="255" ng-pattern="/^[a-zA-Z]*$/">
+            <span class="help-block" ng-show="settingForm.surname.$dirty && settingForm.surname.$error.pattern">Please enter a valid surname</span>
+		</div>
+
+		<div class="form-group">
+			<label for="inputTelephone" class="sr-only">Telephone</label>
+	        <input type="text" id="inputTelephone" class="form-control" placeholder="Telephone"
+            ng-model="editUser.telephone" name="tel" ng-pattern="/^\d{12}$/">
+            <span class="help-block" ng-show="settingForm.tel.$dirty && settingForm.tel.$error.pattern">
+                Please enter a valid telephone (38..)
+            </span>
+		</div>
+		<button class="btn btn-lg btn-link btn-block" data-toggle="modal" data-target="#editPassword">Change password</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="settingForm.$invalid" ng-click="updateUser()">Confirm changes</button>
+	</form>
+	<change-pw></change-pw>
+</div>

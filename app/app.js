@@ -17,9 +17,10 @@ var app = angular.module('app', [
     'app.val.pwcheck',
     'app.ui.navbarmenu',
     'app.ui.addproduct',
+    'app.ui.editproduct',
     'app.ui.productlist',
-    'monospaced.elastic',
-    'ngAnimate'
+    'app.ui.changepw',
+    'monospaced.elastic'
 ])
     .controller('StartCtrl', ['$scope', '$state', function($scope, $state) {
         console.log('its start controller');

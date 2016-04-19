@@ -1,0 +1,58 @@
+<div id="editProduct" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+      <div class="modal-content">
+  		 <form class="form-horizontal" role="form" name="editProductForm" ng-submit="finishUpdate()">
+  	      <div class="modal-header">
+  	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+  	        <h4 class="modal-title">Add new product</h4>
+  	      </div>
+  	      <div class="modal-body">
+  			<div class="form-group">
+  				<label for="name" class="col-sm-2 col-md-2 control-label">
+  					Name
+  				</label>
+  				<div class="col-sm-10 col-md-10">
+  					<input type="text" class="form-control" id="name" ng-model="editProduct.name" required autofocus name="name" ng-maxlength="255">
+                      <span class="help-block" ng-show="editProductForm.name.$dirty && editProductForm.name.$error.required">This field is required</span>
+                      <span class="help-block" ng-show="editProductForm.name.$dirty && editProductForm.name.$error.maxlength">Name is too long</span>
+  				</div>
+  			</div>
+
+  			<div class="form-group">
+  				<label for="price" class="col-sm-2 col-md-2 control-label">
+  					Price
+  				</label>
+  				<div class="col-sm-10 col-md-10">
+  					<input type="text" class="form-control" id="price" ng-model="editProduct.price" required name="price" ng-pattern="/^\d{0,7}(\.\d{1,2})?$/">
+                      <span class="help-block" ng-show="editProductForm.price.$dirty && editProductForm.price.$error.required">This field is required</span>
+                      <span class="help-block" ng-show="editProductForm.price.$dirty && editProductForm.price.$error.pattern">Enter a valid price</span>
+  				</div>
+  			</div>
+
+  			<div class="form-group">
+  				<label for="about" class="col-sm-2 col-md-2 control-label">
+  					About
+  				</label>
+  				<div class="col-sm-10 col-md-10">
+  					<textarea class="form-control" id="about" required name="about"
+                      ng-model="editProduct.about"
+                      ng-maxlength="1000"
+                      ng-required="true"
+                      msd-elastic />
+                      <span class="help-block" ng-show="editProductForm.about.$dirty && editProductForm.about.$error.required">This field is required</span>
+                      <span class="help-block" ng-show="editProductForm.about.$dirty && editProductForm.about.$error.maxlength">Description is too long</span>
+  				</div>
+  			</div>
+
+  			<div class="form-group">
+  				<div class="col-sm-12 text-center">
+  					<button class="btn btn-primary btn-lg" data-dismiss="modal" type="submit" ng-click="finishUpdate()" ng-disabled="editProductForm.$invalid">Confirm</button>
+  				</div>
+  			</div>
+  		</form>
+        </div>
+      </div>
+
+  </div>
+</div>

@@ -1,10 +1,29 @@
 var productList = angular.module('app.ui.productlist', [])
     .directive('productList', function() {
-        var controller = function($scope) {
-            $scope.list = {current : null};
+        var controller = function($scope, ProductService) {
+            $scope.current = null;
             $scope.openClose = function(param, curr) {
-                $scope.list.current = (param == curr ? null : param);
+                $scope.current = (param == curr ? null : param);
             };
+
+            $scope.editProduct = function(p) {
+                $scope.editProduct = p;
+            };
+
+            $scope.addToRemove = function(p) {
+                console.log('srabotalo');
+                if (p.toDelete == true) {
+                    p.toDelete = false;
+                    $scope.deleteProducts.splice($scope.deleteProducts.indexOf(p), 1);
+                }
+                else {
+                    p.toDelete = true;
+                    $scope.deleteProducts.push(p);
+                }
+                console.log('yo', $scope.deleteProducts);
+            };
+
+            $scope.getProduct(10);
         };
 
         return {

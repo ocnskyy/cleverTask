@@ -5,11 +5,8 @@ var productService = angular.module('app.data.productservice',[])
             console.log( "error code - " + err.statusCode );
         };
 
-        var add = function(obj) {
-            function gotSaved() {
-                console.log('SUCCESS');
-            }
-            Backendless.Persistence.of('Product').save(obj, new Backendless.Async(gotSaved, gotError));
+        var add = function(obj, callback) {
+            Backendless.Persistence.of('Product').save(obj, new Backendless.Async(callback, gotError));
         };
 
         var get = function(owner, count, callback) {
@@ -19,18 +16,13 @@ var productService = angular.module('app.data.productservice',[])
             Backendless.Persistence.of('Product').find(dataQuery, new Backendless.Async(callback, gotError));
         };
 
-        var remove = function() {
-
-        };
-
-        var edit = function() {
-
+        var remove = function(p, callback) {
+            Backendless.Persistence.of('Product').remove(p, new Backendless.Async(callback, gotError));
         };
 
         return {
             add : add,
             get : get,
-            edit : edit,
             remove : remove
         };
     });

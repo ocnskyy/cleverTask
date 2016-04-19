@@ -1,142 +1,51 @@
 <div class="container">
-	<!-- <div class="row"> -->
-		<!-- <div class="col-md-6 col-md-offset-3"> -->
-			<form class="form-signin" name="registerForm" novalidate ng-submit="registerMe()" >
-		    	<h2 class="form-signin-heading">Please sign up</h2>
+	<form class="form-signin" name="registerForm" novalidate ng-submit="registerMe()" >
+    	<h2 class="form-signin-heading">Please sign up</h2>
 
-				<div class="form-group">
-					<label for="inputEmail" class="sr-only">Email address</label>
-			        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus ng-model="user.email" name="email">
-					<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.email">Please enter a valid e-mail</span>
-					<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.required">You need enter an e-mail</span>
-				</div>
-
-				<div class="form-group">
-					<label for="inputName" class="sr-only">Name</label>
-			        <input type="text" id="inputName" class="form-control" placeholder="Name" ng-model="user.name" name="name" ng-maxlength="255">
-				</div>
-
-				<div class="form-group">
-					<label for="inputSurname" class="sr-only">Surname</label>
-			        <input type="text" id="inputSurname" class="form-control" placeholder="Surname" ng-model="user.surname" name="surname" ng-maxlength="255">
-				</div>
-
-				<div class="form-group">
-					<label for="inputPassword" class="sr-only">Password</label>
-			        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="user.password" name="password"
-					ng-minlength="6"
-					ng-maxlength="16"
-					ng-pattern="/^[a-zA-Z0-9]*$/">
-					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.required">You need enter a password</span>
-					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.minlength">Password too short</span>
-					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.maxlength">Password too long</span>
-					<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.pattern">Only letters and numbers</span>
-				</div>
-
-				<div class="form-group">
-					<label for="inputPassword2" class="sr-only">Confirm password</label>
-			        <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm password" required ng-model="user.password2"
-					pw-check="inputPassword" name="password2">
-					<span class="help-block" ng-show="registerForm.password2.$dirty && registerForm.password2.$error.pwmatch">Passwords don't match</span>
-				</div>
-
-				<div class="form-group">
-					<label for="inputTelephone" class="sr-only">Telephone</label>
-			        <input type="text" id="inputTelephone" class="form-control" placeholder="Telephone" ng-model="user.telephone" name="tel">
-				</div>
-
-		        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="registerForm.$invalid">Sign up</button>
-				<div class="checkbox text-center">
-					<p><a href="#/login">Back to login</a></p>
-				</div>
-			</form>
-		<!-- </div> -->
-	<!-- </div> -->
-</div>
-
-<!-- <div class="container">
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<div class="page-header">
-						<h1>
-							Registration
-						</h1>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<form class="form-horizontal" role="form">
-
-						<div class="form-group">
-							<label for="name" class="col-sm-2 control-label">
-								Name
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="login" ng-model="name">
-							</div>
-						</div>
-
-                  <div class="form-group">
-							<label for="email" class="col-sm-2 control-label">
-								E-mail
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="login" ng-model="email">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="password" class="col-sm-2 control-label">
-								Password
-							</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control" id="password" ng-model="password">
-							</div>
-						</div>
-
-                  <div class="form-group">
-							<label for="age" class="col-sm-2 control-label">
-								Age
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="login" ng-model="age">
-							</div>
-						</div>
-
-                  <div class="form-group">
-							<label for="contry" class="col-sm-2 control-label">
-								Country
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="login" ng-model="country">
-							</div>
-						</div>
-
-                  <div class="form-group">
-							<label for="sex" class="col-sm-2 control-label">
-								Sex
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="login" ng-model="sex">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-                        <a href="#/login">Back to login</a><br>
-								<button type="submit" class="btn btn-default" ng-click="registerMe()">
-									Register
-								</button>
-							</div>
-						</div>
-
-					</form>
-				</div>
-			</div>
+		<div class="form-group">
+			<label for="inputEmail" class="sr-only">Email address</label>
+	        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus ng-model="user.email" name="email">
+			<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.email">Please enter a valid e-mail</span>
+			<span class="help-block" ng-show="registerForm.email.$dirty && registerForm.email.$error.required">You need enter an e-mail</span>
 		</div>
-	</div>
-</div> -->
+
+		<div class="form-group">
+			<label for="inputName" class="sr-only">Name</label>
+	        <input type="text" id="inputName" class="form-control" placeholder="Name" ng-model="user.name" name="name" ng-maxlength="255">
+		</div>
+
+		<div class="form-group">
+			<label for="inputSurname" class="sr-only">Surname</label>
+	        <input type="text" id="inputSurname" class="form-control" placeholder="Surname" ng-model="user.surname" name="surname" ng-maxlength="255">
+		</div>
+
+		<div class="form-group">
+			<label for="inputPassword" class="sr-only">Password</label>
+	        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="user.password" name="password"
+			ng-minlength="6"
+			ng-maxlength="16"
+			ng-pattern="/^[a-zA-Z0-9]*$/">
+			<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.required">You need enter a password</span>
+			<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.minlength">Password too short</span>
+			<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.maxlength">Password too long</span>
+			<span class="help-block" ng-show="registerForm.password.$dirty && registerForm.password.$error.pattern">Only letters and numbers</span>
+		</div>
+
+		<div class="form-group">
+			<label for="inputPassword2" class="sr-only">Confirm password</label>
+	        <input type="password" id="inputPassword2" class="form-control" placeholder="Confirm password" required ng-model="user.password2"
+			pw-check="inputPassword" name="password2">
+			<span class="help-block" ng-show="registerForm.password2.$dirty && registerForm.password2.$error.pwmatch">Passwords don't match</span>
+		</div>
+
+		<div class="form-group">
+			<label for="inputTelephone" class="sr-only">Telephone</label>
+	        <input type="text" id="inputTelephone" class="form-control" placeholder="Telephone" ng-model="user.telephone" name="tel">
+		</div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="registerForm.$invalid">Sign up</button>
+		<div class="checkbox text-center">
+			<p><a href="#/login">Back to login</a></p>
+		</div>
+	</form>
+</div>

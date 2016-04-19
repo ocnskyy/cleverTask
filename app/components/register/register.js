@@ -1,18 +1,3 @@
-// var registration = angular.module('app.registration', ['ui.router'])
-//
-//     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
-//         $stateProvider
-//             .state('registration', {
-//                 url: '/registration',
-//                 templateUrl: 'components/registration/registration.html',
-//                 controller: 'RegistrationCtrl'
-//             });
-//     }])
-//     .controller('RegistrationCtrl', ['$scope', function($scope) {
-//         console.log('its registration controller');
-//     }]);
-
-
 var register = angular.module('app.register', [])
 
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
