@@ -11,7 +11,6 @@ var productList = angular.module('app.ui.productlist', [])
             };
 
             $scope.addToRemove = function(p) {
-                console.log('srabotalo');
                 if (p.toDelete == true) {
                     p.toDelete = false;
                     $scope.deleteProducts.splice($scope.deleteProducts.indexOf(p), 1);
@@ -20,7 +19,6 @@ var productList = angular.module('app.ui.productlist', [])
                     p.toDelete = true;
                     $scope.deleteProducts.push(p);
                 }
-                console.log('yo', $scope.deleteProducts);
             };
 
             $scope.getProduct(10);

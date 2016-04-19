@@ -12,7 +12,6 @@ var settings = angular.module('app.settings', [])
         console.log('its settings controller');
         $scope.user = UserService.getUser();
         $scope.editUser = UserService.getUser();
-        // $scope.user === null ? $state.go('login') : console.log('logged');
         $scope.hideAdd = true;
         localStorage.getItem('current_user') || $scope.user ? console.log('logged') : $state.go('login');
 

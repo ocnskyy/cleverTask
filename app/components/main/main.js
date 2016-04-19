@@ -35,7 +35,6 @@ var login = angular.module('app.main', [])
                 $scope.$apply(function() {
                     $scope.products = res.data;
                 });
-                console.log('heh', $scope.products);
             }
             $scope.pagination = count;
             ProductService.get($scope.user.objectId, count, catchProduct);
@@ -45,12 +44,16 @@ var login = angular.module('app.main', [])
             function userDeleted(res) {
                 console.log('deleted', res);
                 $scope.$apply(function() {
-                    $scope.products.splice($scope.deleteProducts[i], 1);
-                    $scope.deleteProducts.splice($scope.deleteProducts[i], 1);
+                    $scope.deleteProducts.splice($scope.deleteProducts.indexOf($scope.deleteProducts[i]), 1);
                 });
             }
-            for (var i =0; i < $scope.deleteProducts.length; i++) {
-                ProductService.remove($scope.deleteProducts[i], userDeleted, $scope);
+            for (var i = 0; i < $scope.deleteProducts.length; i++) {
+                ProductService.remove($scope.deleteProducts[i], userDeleted);
+                for (var j = 0; j < $scope.products.length; j ++) {
+                    if ($scope.products[j].objectId == $scope.deleteProducts[i].objectId) {
+                        $scope.products.splice($scope.products.indexOf($scope.products[j]), 1);
+                    }
+                }
             }
         };
 
