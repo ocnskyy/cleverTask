@@ -11,3 +11,7 @@ $ cd cleverTask
 $ npm install
 ```
 The app is available at <http://localhost:9999/#/main>
+### Development
+```sh
+$ gulp watch
+```
