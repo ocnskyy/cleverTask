@@ -6,10 +6,6 @@ var productList = angular.module('app.ui.productlist', [])
                 $scope.current = (param == curr ? null : param);
             };
 
-            $scope.editProduct = function(p) {
-                $scope.editProduct = p;
-            };
-
             $scope.addToRemove = function(p) {
                 if (p.toDelete == true) {
                     p.toDelete = false;
@@ -19,6 +15,10 @@ var productList = angular.module('app.ui.productlist', [])
                     p.toDelete = true;
                     $scope.deleteProducts.push(p);
                 }
+            };
+
+            $scope.editProductFunc = function(p) {
+                    $scope.editProduct = p;
             };
 
             $scope.getProduct(10);

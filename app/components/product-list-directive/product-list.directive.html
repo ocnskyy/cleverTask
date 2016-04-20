@@ -2,7 +2,7 @@
     <div class="jumbotron" ng-repeat="p in products track by $index">
         <h2>Product name:
             <span class="controlls">
-                <i class="glyphicon glyphicon-pencil" ng-click="editProduct(p)" data-toggle="modal" data-target="#editProduct"></i>
+                <i class="glyphicon glyphicon-pencil" ng-click="editProductFunc(p)" data-toggle="modal" data-target="#editProduct"></i>
                 <i class="glyphicon glyphicon-remove"
                 ng-class="{'to-delete' : p.toDelete}"
                 ng-click="addToRemove(p)"
