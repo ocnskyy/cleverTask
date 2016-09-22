@@ -1,7 +1,9 @@
 # Clever Task
 ### Requirements
 You need `http-server`, `bower` and `gulp`to be installed:
-` $ sudo npm install -g http-server gulp bower
+```sh
+$ sudo npm install -g http-server gulp bower
+``` 
 
 ### Installation
 ```sh
