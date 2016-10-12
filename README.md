@@ -2,7 +2,7 @@
 ## Requirements
 ![about](https://pp.vk.me/c626419/v626419854/275af/RH9mseDWLvs.jpg)
 
-### Installation
+## Installation
 You need `http-server`, `bower` and `gulp`to be installed:
 ```sh
 $ sudo npm install -g http-server gulp bower
@@ -15,7 +15,7 @@ $ npm install
 ```
 The app will be available at <http://localhost:9999/#/main>
 
-### Development
+## Development
 ```sh
 $ gulp watch
 ```
